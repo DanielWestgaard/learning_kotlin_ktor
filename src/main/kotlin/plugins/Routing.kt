@@ -17,6 +17,6 @@ fun Application.configureRouting() {
         authRoutes()
 
         // User info route (/userinfo)
-        // userInfoRoutes
+        userInfoRoutes()
     }
 }
