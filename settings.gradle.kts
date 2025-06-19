@@ -1,0 +1,1 @@
+rootProject.name = "learning_kotlin_ktor"
