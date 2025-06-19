@@ -2,8 +2,11 @@ plugins {
     kotlin("jvm") version "2.1.21"
 
     id("io.ktor.plugin") version "3.1.3"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.21"
 }
+
+group = "com.example"
+version = "0.0.1"
 
 application {
     mainClass.set("ApplicationKt")
@@ -11,9 +14,6 @@ application {
     var isDevelopment: Boolean = true //project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
-
-group = "org.example"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -31,6 +31,9 @@ dependencies {
     // Authentication & JWT
     implementation("io.ktor:ktor-server-auth-jvm")
     implementation("io.ktor:ktor-server-auth-jwt-jvm")
+
+    // JWT library (this was missing!)
+    implementation("com.auth0:java-jwt:4.4.0")
 
     // CORS (if you need frontend integration)
     implementation("io.ktor:ktor-server-cors:3.1.3")

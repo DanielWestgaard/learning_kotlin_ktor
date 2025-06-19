@@ -9,7 +9,6 @@ import model.LoginRequest
 import model.TokenResponse
 import service.JwtService
 import service.UserService
-import java.lang.Exception
 
 fun Route.authRoutes() {
     val userService = UserService()
@@ -18,10 +17,13 @@ fun Route.authRoutes() {
     route("/auth") {
 
         // POST /auth/login - User login endpoint
-        post ("/login") {
+        post("/login") {
             try {
+                println("Login attempt received")
+
                 // Parse the JSON request body
                 val loginRequest = call.receive<LoginRequest>()
+                println("Parsed login request: username=${loginRequest.username}")
 
                 // Validate the user credentials
                 val user = userService.validateUser(
@@ -30,6 +32,7 @@ fun Route.authRoutes() {
                 )
 
                 if (user != null) {
+                    println("User validated successfully: ${user.username}")
                     // Generate tokens
                     val accessToken = jwtService.generateAccessToken(user)
                     val idToken = jwtService.generateIdToken(user)
@@ -43,6 +46,7 @@ fun Route.authRoutes() {
                         )
                     )
                 } else {
+                    println("Invalid credentials for username: ${loginRequest.username}")
                     // Invalid credentials
                     call.respond(
                         HttpStatusCode.Unauthorized,
@@ -52,9 +56,11 @@ fun Route.authRoutes() {
 
             } catch (e: Exception) {
                 // Handle any errors (like malformed JSON)
+                println("Error in login: ${e.message}")
+                e.printStackTrace()
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    mapOf("error" to "bad_request", "message" to "Invalid request format")
+                    mapOf("error" to "bad_request", "message" to "Invalid request format: ${e.message}")
                 )
             }
         }
