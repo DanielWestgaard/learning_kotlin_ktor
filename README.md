@@ -93,3 +93,47 @@ Where you will get a similar response:
 > [!NOTE]
 > This works because we "decode" the "user_info" from the token, and matches this with the username
 > from stored users.
+
+
+# Important concepts to understand 🧑‍🏫
+This is a section dedicated to learning about the important concepts needed to understand for this learning-project.
+
+## JWT
+> JSON Web Token<br>
+"A compact, self-contained way to securely transmit information between parties (client/server) as a JSON object"
+
+- Token used for authenticating a user. This is stored on the clients side, and the Server only authenticates the user.<br>
+- The format `Header.Payload.Signature`<br>
+    - Eg. `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW5pLWlkLXVzZXJzIiwiaXNzIjoibWluaS1pZC1zZXJ2aWNlIiwidXNlcm5hbWUiOiJnYW5kYWxmX3RoZV9ncmV5IiwidXNlcl9pZCI6IjEiLCJzY29wZSI6InJlYWRfd3JpdGUiLCJleHAiOjE3NTA0NDQ0Mjl9.ynUTTVYgCp2DV8-pYGwxdMeIZJkHyflt24xuHtOgpq8`<br>
+- In this project, we generate it in the `JwtService.kt`-file, and use it for both the `access token`, and the `id token`. 
+
+## OIDC
+> OpenID Connect
+
+...
+
+## OAuth2
+> Open Authentication 2.0
+"(An open standard for authorization that) allows a third-party to access user data on the users behalf, without the user's password"
+
+This "Mini ID"-project acts as both Authorization Server (`/auth/login` gives tokens) **and** Resource Server (`/userinfo`).
+
+### Oauth2 Flow used in this project (simplified)
+```
+┌──────────────┐     1. Login Request    ┌─────────────────┐
+│    Client    │ ─────────────────────→  │  Authorization  │
+│  (The App)   │                         │     Server      │
+│              │ ←─────────────────────  │    (Mini-ID)    │
+└──────────────┘     2. Access Token     └─────────────────┘
+       │                                        
+       │ 3. Use Token                          
+       ▼                                        
+┌─────────────┐    4. Protected Data   ┌─────────────────┐
+│   Client    │ ←───────────────────── │ Resource Server │
+│             │                        │      (API)      │
+└─────────────┘                        └─────────────────┘
+```
+```kotlin
+// OAuth2 scopes in the access token:
+.withClaim("scope", "read write") // What the token allows
+```
