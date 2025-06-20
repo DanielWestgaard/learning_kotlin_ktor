@@ -107,16 +107,15 @@ This is a section dedicated to learning about the important concepts needed to u
     - Eg. `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW5pLWlkLXVzZXJzIiwiaXNzIjoibWluaS1pZC1zZXJ2aWNlIiwidXNlcm5hbWUiOiJnYW5kYWxmX3RoZV9ncmV5IiwidXNlcl9pZCI6IjEiLCJzY29wZSI6InJlYWRfd3JpdGUiLCJleHAiOjE3NTA0NDQ0Mjl9.ynUTTVYgCp2DV8-pYGwxdMeIZJkHyflt24xuHtOgpq8`<br>
 - In this project, we generate it in the `JwtService.kt`-file, and use it for both the `access token`, and the `id token`. 
 
-## OIDC
-> OpenID Connect
-
-...
 
 ## OAuth2
-> Open Authentication 2.0
+> Open Authorization 2.0
 "(An open standard for authorization that) allows a third-party to access user data on the users behalf, without the user's password"
 
-This "Mini ID"-project acts as both Authorization Server (`/auth/login` gives tokens) **and** Resource Server (`/userinfo`).
+- This "Mini ID"-project acts as both Authorization Server (`/auth/login` gives tokens) **and** Resource Server (`/userinfo`).
+- There are two Token types:
+  - **Access Token**: (What I use here) For accessing protected resources (`/userinfo`).
+  - **Refresh Token**: For getting new access tokens (**haven't implemented** this *yet*).
 
 ### Oauth2 Flow used in this project (simplified)
 ```
@@ -137,3 +136,24 @@ This "Mini ID"-project acts as both Authorization Server (`/auth/login` gives to
 // OAuth2 scopes in the access token:
 .withClaim("scope", "read write") // What the token allows
 ```
+
+
+## OIDC
+> OpenID Connect
+> "An identifier layer built on top of OAuth2.": OAuth2 + Identity
+
+- **OAuth2 is Authorization**: "Can I access this resource?"
+- **OIDC is Authentication**: "Who am I AND can I access this resource?"
+- As you can see in the flow under, and in the project, this (service) is an OIDC Provider, since it returns both 
+**Access Token** (authorizing / what you can access) and **ID Token** (contains user identity information).
+
+### OIDC Flow used in this project (simplified)
+```
+┌─────────────┐    1. Login           ┌────────────────┐
+│   Client    │ ───────────────────→  │ OIDC Provider  │
+│             │                       │   (Mini-ID)    │
+│             │ ←───────────────────  │                │
+└─────────────┘  2. Access Token +    └────────────────┘
+                    ID Token
+```
+ 
