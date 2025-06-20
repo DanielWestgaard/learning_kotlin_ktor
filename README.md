@@ -5,7 +5,7 @@ It focuses on a simple approach of using JWT (JSON Web Token) and OAuth2 princip
 authentication.
 
 
-## Structure
+## Structure 🗂️
 Keeping it simple, as I'm still learning:
 ```
 src/
@@ -18,19 +18,27 @@ src/
 │   │   │   ├── User.kt
 │   │   │   └── UserInfo.kt
 │   │   ├── plugins/                    # Helping functions
-│   │   │   ├── CORS.kt                 # Handling cross-origin requests - whatever that means?
+│   │   │   ├── CORS.kt                 # Handling cross-origin requests - lets browsers call my API from different domains
 │   │   │   ├── Routing.kt              # Simple Overview/General routing, and calling implemented 'routes/'
-│   │   │   ├── Security.kt             # ? - Decoding JWT to verify username in provided JWT? 
+│   │   │   ├── Security.kt             # Security Gatekeeper: Decodes JWT (to verify username) and validates signature, expiration, issuer, and 'audience' 
 │   │   │   └── Serialization.kt        # Tells ktor how to read and handle JSON in the API
 │   │   ├── routes                      # Different endpoints to the API
 │   │   │   ├── AuthRoutes.kt           # Authentication related: '/auth/login' (POST for login, and GET for helping info)
 │   │   │   └── UserInfoRoutes.kt       # User Information: '/userinfo' (user only able to get information about ones account with correct tokens)
-│   │   └── service/                    # ?
+│   │   └── service/                    # Business logic: Separation of concers - Handles Authentication, User Management, and Token Generalization
 │   │       ├── JwtService.kt           # Generating Access- and ID Token for the user
 │   │       └── UserService.kt          # Creating DB (mutableListOf) of User data class with some helper functions to find the user
 │   └── resources/                      # Not really used
 │       └── application.conf
 ```
+
+
+## What I Learned 🧠
+- JWT structure: Header.Payload.Signature
+- OIDC standard compliance (`sub`, `iss`, `aud` claims)
+- Ktor plugin architecture and dependency injection
+- Kotlin serialization with @Serializable
+- Bearer token authentication pattern
 
 
 ## How to run 🙋‍♂️
@@ -43,10 +51,10 @@ running the following commands:
 ./gradlew run
 ```
 
-### 0.5. Info for Authenticating
+### 0.5. Info for Authenticating ℹ️
 To get super simple info for getting started with the tokens, paste ```http://localhost:8080/auth/login``` in a browser.
 
-### 1. Authenticating and getting tokens
+### 1. Authenticating and getting tokens 🔑
 To get the Access Token and ID Token, run the following command:
 ```bash
 curl -X POST http://localhost:8080/auth/login \
@@ -64,10 +72,10 @@ For a successful call, you will then get a similar output as response:
 }
 ```
 > [!NOTE]
-> These tokens will expire after 1 hour (3600 seconds)
+> These tokens will expire after 1 hour (3600 seconds) - good security practice.
 
 
-### 2. Using token/-s
+### 2. Using token/-s 🔐
 Keeping this simple, you can test out if this authentication process works by pasting in the 
 `access_token` in this command: `curl -H "Authorization: Bearer <access-token>" http://localhost:8080/userinfo`. Eg:
 ```bash
