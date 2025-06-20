@@ -1,5 +1,8 @@
 package model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class TokenResponse(
     val access_token: String,
     val id_token: String,
