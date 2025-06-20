@@ -67,23 +67,27 @@ fun Route.authRoutes() {
 
         // GET /auth/login - Simple login form (for testing)
         get("/login") {
+            // Using these two initial ones as examples
+            val testUserOne = userService.findUserById("1")
+            val testUserTwo = userService.findUserById("2")
+
             call.respondText("""
                 <!DOCTYPE html>
                 <html>
                 <head><title>Mini-ID Login</title></head>
                 <body>
                     <h2>Mini-ID Service - Test Login</h2>
-                    <p>Use these test accounts:</p>
+                    <p>Use these test accounts ("username / password"):</p>
                     <ul>
-                        <li><strong>testuser</strong> / password123</li>
-                        <li><strong>alice</strong> / alice123</li>
+                        <li><strong>${testUserOne?.username}</strong> / ${testUserOne?.password}</li>
+                        <li><strong>${testUserTwo?.username}</strong> / ${testUserTwo?.password}</li>
                     </ul>
                     
-                    <h3>Try with curl:</h3>
+                    <h3>Try with curl (eg.):</h3>
                     <pre>
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username": "testuser", "password": "password123"}'
+  -d '{"username": "${testUserOne?.username}", "password": "${testUserOne?.password}"}'
                     </pre>
                 </body>
                 </html>
