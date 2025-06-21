@@ -1,0 +1,27 @@
+# Use postgres/example user/password credentials
+
+services:
+
+  db:
+    image: postgres:15-alpine  # Alpine version is much smaller
+    container_name: kotlin_learning_db
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    environment:
+      POSTGRES_DB: kotlin_learning
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional: initial schema
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
