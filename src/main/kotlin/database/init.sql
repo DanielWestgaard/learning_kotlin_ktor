@@ -6,7 +6,7 @@ CREATE TABLE users (
     name VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL, -- should be hashed
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Replaces the very first part of UserService
@@ -17,4 +17,4 @@ INSERT INTO users (id, username, email, name, password) VALUES
 
 -- Create index on username for faster lookups
 CREATE INDEX idx_users_username ON users(username);
-CREATE INDEX idx_users_username ON users(email);
+CREATE INDEX idx_users_email ON users(email);
