@@ -1,3 +1,4 @@
+import database.configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -13,6 +14,7 @@ fun main() {
 }
 
 fun Application.module() {
+    configureDatabase()     // Configure database connection
     configureSerialization()  // Install JSON handling first
     configureSecurity()       // Install authentication
     configureCORS()          // Install CORS

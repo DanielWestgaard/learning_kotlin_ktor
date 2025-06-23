@@ -1,36 +1,88 @@
 package service
 
 import model.User
+import database.UsersTable
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserService {
-    // In-memory user storage for simplicity
-    // Future task could be loading up a small db container, would be fun!
-    private val users = mutableListOf(
-        User(
-            id = "1",
-            username = "gandalf_the_grey",
-            email = "gandalf@grey.com",
-            name = "Gandalf",
-            password = "M@g1c"
-        ),
-        User(
-            id = "2",
-            username = "gandalf_the_white",
-            email = "gandalf@white.com",
-            name = "Gandalf",
-            password = "M@g1c_"
-        )
-    )
 
     fun validateUser(username: String, password: String): User? {
-        return users.find { it.username == username && it.password == password }
+        return transaction {
+            // Query the database for a user with matching username and password
+            UsersTable
+                .select { (UsersTable.username eq username) and (UsersTable.password eq password) }
+                .singleOrNull()
+                ?.let { row ->
+                    User(
+                        id = row[UsersTable.id],
+                        username = row[UsersTable.username],
+                        email = row[UsersTable.email],
+                        name = row[UsersTable.name],
+                        password = row[UsersTable.password]
+                    )
+                }
+        }
     }
 
     fun findUserById(id: String): User? {
-        return users.find { it.id == id }
+        return transaction {
+            UsersTable
+                .select { UsersTable.id eq id }
+                .singleOrNull()
+                ?.let { row ->
+                    User(
+                        id = row[UsersTable.id],
+                        username = row[UsersTable.username],
+                        email = row[UsersTable.email],
+                        name = row[UsersTable.name],
+                        password = row[UsersTable.password]
+                    )
+                }
+        }
     }
 
     fun findUserByUsername(username: String): User? {
-        return users.find { it.username == username }
+        return transaction {
+            UsersTable
+                .select { UsersTable.username eq username }
+                .singleOrNull()
+                ?.let { row ->
+                    User(
+                        id = row[UsersTable.id],
+                        username = row[UsersTable.username],
+                        email = row[UsersTable.email],
+                        name = row[UsersTable.name],
+                        password = row[UsersTable.password]
+                    )
+                }
+        }
+    }
+
+    // Bonus: Method to create a new user
+    fun createUser(username: String, email: String, name: String, password: String): User? {
+        return transaction {
+            try {
+                val userId = generateUserId() // Simple ID generation
+
+                UsersTable.insert {
+                    it[id] = userId
+                    it[UsersTable.username] = username
+                    it[UsersTable.email] = email
+                    it[UsersTable.name] = name
+                    it[UsersTable.password] = password // In production: hash this!
+                }
+
+                User(userId, username, email, name, password)
+            } catch (e: Exception) {
+                println("Failed to create user: ${e.message}")
+                null
+            }
+        }
+    }
+
+    private fun generateUserId(): String {
+        // Simple ID generation - in production use UUID.randomUUID().toString()
+        return System.currentTimeMillis().toString()
     }
 }

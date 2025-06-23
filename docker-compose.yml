@@ -1,27 +1,31 @@
-# Use postgres/example user/password credentials
-
+# Docker Compose for PostgreSQL database
 services:
 
+  # PostgreSQL Database
   db:
-    image: postgres:15-alpine  # Alpine version is much smaller
+    image: postgres:15-alpine
     container_name: kotlin_learning_db
     restart: always
-    # set shared memory limit when using docker compose
     shm_size: 128mb
     environment:
       POSTGRES_DB: kotlin_learning
       POSTGRES_USER: dev_user
       POSTGRES_PASSWORD: dev_password
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional: initial schema
+    ports:
+      - "5432:5432"  # Expose PostgreSQL port so the app can connect
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - /Users/dmartinsen/pers-prog/learning_kotlin_ktor/src/main/kotlin/database/init.sql  # We'll create this file
 
+  # Database admin interface (optional, but useful for development)
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - "8081:8080"  # Changed to 8081 to avoid conflict with your Ktor app
+    depends_on:
+      - db
 
 volumes:
   postgres_data:

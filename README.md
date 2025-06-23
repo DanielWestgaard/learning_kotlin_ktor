@@ -156,7 +156,7 @@ This is a section dedicated to learning about the important concepts needed to u
 └─────────────┘  2. Access Token +    └────────────────┘
                     ID Token
 ```
- 
+
 
 # Docker
 Start docker (DB) container:
