@@ -41,6 +41,10 @@ src/
 - Bearer token authentication pattern
 
 
+## Current flow
+
+
+
 ## How to run 🙋‍♂️
 To build and run, either by using IntelliJ IDEA´s Gradle tool on the right side, or by 
 running the following commands:
@@ -159,7 +163,11 @@ This is a section dedicated to learning about the important concepts needed to u
 
 
 # Docker
-Start docker (DB) container:
+Start docker (DB) container (`-d` flag for running in the background):
 ```bash
 docker compose up
+```
+Look at the contents of (Users in) the database:
+```bash
+docker exec -it kotlin_learning_db psql -U dev_user -d kotlin_learning -c "SELECT * FROM users;"
 ```

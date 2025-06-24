@@ -1,11 +1,11 @@
 package routes
 
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import model.LoginRequest
+import model.RegisterUser
 import model.TokenResponse
 import service.JwtService
 import service.UserService
@@ -92,6 +92,42 @@ curl -X POST http://localhost:8080/auth/login \
                 </body>
                 </html>
             """.trimIndent(), ContentType.Text.Html)
+        }
+
+        // POST /register - Create new user
+        post("/register") {
+            try {
+                println("Attempt to create new user received.")
+
+                // Parse the JSON request
+                val createUserRequest = call.receive<RegisterUser>()
+                println("Parsed Create User request: username=${createUserRequest.username}")
+
+                // Try to add the user to the DB
+                userService.createUser(
+                    username = createUserRequest.username,
+                    password = createUserRequest.password,
+                    name = createUserRequest.name,
+                    email = createUserRequest.email
+                )
+
+                val created_user = userService.findUserByUsername(createUserRequest.username)
+                call.respond(
+                    HttpStatusCode.Created,
+                    "Successfully added user in DB!" +
+                            "\nUsername in db: '${created_user?.username}'" +
+                            "\nEmail in db: '${created_user?.email}'"
+                )
+                println("User created successfully created!")
+
+            } catch (e: Exception) {
+                println("Error creating new user: '${e.message}'.")
+                e.printStackTrace()
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Unable to create new user: '${e.message}'. "
+                )
+            }
         }
     }
 }

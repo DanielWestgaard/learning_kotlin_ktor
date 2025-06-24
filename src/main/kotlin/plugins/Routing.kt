@@ -11,6 +11,7 @@ fun Application.configureRouting() {
         // Health check endpoint
         get("/") {
             call.respondText("Mini-ID Service is running!")
+            println("sodfip")
         }
 
         // Authentication routes (/login, /token)

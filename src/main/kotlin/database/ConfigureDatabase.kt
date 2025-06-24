@@ -6,7 +6,7 @@ import database.Database
 fun Application.configureDatabase() {
     // Database configuration
     // In a real production app, these would come from environment variables or config files
-    val jdbcUrl = "jdbc:postgresql://localhost:5432/kotlin_learning"
+    val jdbcUrl = "jdbc:postgresql://localhost:5432/kotlin_learning" // Java Database Connectivity URL
     val username = "dev_user"
     val password = "dev_password"
 

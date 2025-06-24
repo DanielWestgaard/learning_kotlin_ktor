@@ -65,6 +65,9 @@ class UserService {
             try {
                 val userId = generateUserId() // Simple ID generation
 
+                // TODO: Check that username and email doesn't exist
+
+                // Should also check regex to make sure values are valid
                 UsersTable.insert {
                     it[id] = userId
                     it[UsersTable.username] = username
@@ -74,8 +77,9 @@ class UserService {
                 }
 
                 User(userId, username, email, name, password)
+
             } catch (e: Exception) {
-                println("Failed to create user: ${e.message}")
+                println("Failed to create user: ${e}")
                 null
             }
         }
