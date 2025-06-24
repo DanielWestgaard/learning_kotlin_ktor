@@ -41,9 +41,6 @@ src/
 - Bearer token authentication pattern
 
 
-## Current flow
-
-
 
 ## How to run 🙋‍♂️
 To build and run, either by using IntelliJ IDEA´s Gradle tool on the right side, or by 
@@ -54,6 +51,19 @@ running the following commands:
 ```bash
 ./gradlew run
 ```
+
+### Docker - Database storage
+Start docker (DB) container (`-d` flag for running in the background):
+```bash
+docker compose up
+```
+Look at the contents of (Users in) the database:
+```bash
+docker exec -it kotlin_learning_db psql -U dev_user -d kotlin_learning -c "SELECT * FROM users;"
+```
+Can also use connect to the Admin container for a more development/interactive view of the database (container), by
+typing in this url `http://localhost:8081`, and following the variables in the `docker-compose.yml`.
+
 
 ### 0.5. Info for Authenticating ℹ️
 To get super simple info for getting started with the tokens, paste ```http://localhost:8080/auth/login``` in a browser.
@@ -159,15 +169,4 @@ This is a section dedicated to learning about the important concepts needed to u
 │             │ ←───────────────────  │                │
 └─────────────┘  2. Access Token +    └────────────────┘
                     ID Token
-```
-
-
-# Docker
-Start docker (DB) container (`-d` flag for running in the background):
-```bash
-docker compose up
-```
-Look at the contents of (Users in) the database:
-```bash
-docker exec -it kotlin_learning_db psql -U dev_user -d kotlin_learning -c "SELECT * FROM users;"
 ```
