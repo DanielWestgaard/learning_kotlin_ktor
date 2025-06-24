@@ -2,9 +2,13 @@ import database.configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import mu.KotlinLogging
 import plugins.*
 
 fun main() {
+    val logger = KotlinLogging.logger {}
+    logger.info { "Started Ktor API Application!" }
+
     embeddedServer(
         Netty,
         port = 8080,
