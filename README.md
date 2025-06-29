@@ -61,6 +61,10 @@ Look at the contents of (Users in) the database:
 ```bash
 docker exec -it kotlin_learning_db psql -U dev_user -d kotlin_learning -c "SELECT * FROM users;"
 ```
+Remove specific users from DB. Eg.:
+```bash
+docker exec -it kotlin_learning_db psql -U dev_user -d kotlin_learning -c "DELETE FROM users WHERE username = 'frodo_baggins';"
+```
 Can also use connect to the Admin container for a more development/interactive view of the database (container), by
 typing in this url `http://localhost:8081`, and following the variables in the `docker-compose.yml`.
 
